@@ -18,6 +18,7 @@ const RegisterPage = () => {
             autoComplete='off'
         >
             <Form.Item
+                labelCol={{ span: 24}}
                 label="Full name"
                 name="fullName"
                 rules={[{
@@ -62,7 +63,7 @@ const RegisterPage = () => {
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 6, span: 16}}>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" loading={false}>
                     Register
                 </Button>
             </Form.Item>
