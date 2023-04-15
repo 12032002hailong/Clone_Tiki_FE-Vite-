@@ -8,30 +8,26 @@ import {
   message,
   notification
 } from "antd";
+import "./register.scss";
 import { useNavigate, Link } from "react-router-dom";
-import { callLogin } from "../../services/api";
-import { useDispatch } from "react-redux";
-import { doLoginAction } from "../../redux/account/accountSlice";
+import { callRegister } from "../../services/api";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
-  const dispatch = useDispatch();
 
   const onFinish = async (values) => {
-    const { username, password } = values;
+    const { fullName, email, password, phone } = values;
     setIsSubmit(true);
-    const res = await callLogin(username, password);
+    const res = await callRegister(fullName, email, password, phone);
     setIsSubmit(false);
-    if (res?.data) {
-      localStorage.setItem("access_token", res.data.access_token);
-      dispatch(doLoginAction(res.data.user));
-      message.success("Đăng nhập tài khoản thành công!");
-      navigate("/");
+    if (res?.data?._id) {
+      message.success("Đăng ký tài khoản thành công!");
+      navigate("/login");
     } else {
       notification.error({
         message: "Có lỗi xảy ra",
-        descritption:
+        description:
           res.message && Array.isArray(res.message)
             ? res.message[0]
             : res.message,
@@ -50,12 +46,24 @@ const LoginPage = () => {
         onFinish={onFinish}
         autoComplete="off"
       >
-        <Typography.Title>Đăng Nhập</Typography.Title>
+        <Typography.Title>Tạo mới tài khoản</Typography.Title>
         <Divider></Divider>
+        <Form.Item
+          label="Họ và tên:"
+          name="fullName"
+          rules={[
+            {
+              required: true,
+              message: "fullname không được để trống"
+            }
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
         <Form.Item
           label="Email:"
-          name="username"
+          name="email"
           rules={[
             {
               required: true,
@@ -79,16 +87,29 @@ const LoginPage = () => {
           <Input.Password />
         </Form.Item>
 
+        <Form.Item
+          label="Phone:"
+          name="phone"
+          rules={[
+            {
+              required: true,
+              message: "phone không được để trống"
+            }
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item style={{ textAlign: "center" }}>
           <Button type="primary" htmlType="submit" loading={isSubmit}>
-            Đăng nhập
+            Đăng ký
           </Button>
         </Form.Item>
         <Divider>Or</Divider>
         <p className="text text-normal">
-          Chưa có tài khoản ?
+          Đã có tài khoản ?
           <span>
-            <Link to="/register"> Đăng ký</Link>
+            <Link to="/login"> Đăng nhập</Link>
           </span>
         </p>
       </Form>
@@ -96,4 +117,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
