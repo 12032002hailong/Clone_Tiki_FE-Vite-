@@ -10,10 +10,13 @@ import {
 } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { callLogin } from "../../services/api";
+import { useDispatch } from "react-redux";
+import { doLoginAction } from "../../redux/account/accountSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isSubmit, setIsSubmit] = useState(false);
+  const dispatch = useDispatch();
 
   const onFinish = async (values) => {
     const { username, password } = values;
@@ -21,8 +24,8 @@ const LoginPage = () => {
     const res = await callLogin(username, password);
     setIsSubmit(false);
     if (res?.data) {
-      localStorage.setItem("access_token:", res.data.access_token);
-      console.log(">>> check res: ", res);
+      localStorage.setItem("access_token", res.data.access_token);
+      dispatch(doLoginAction(res.data.user));
       message.success("Đăng nhập tài khoản thành công!");
       navigate("/");
     } else {
