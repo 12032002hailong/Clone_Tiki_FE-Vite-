@@ -15,27 +15,31 @@ import Loading from "./components/Loading";
 import NotFound from "./components/NotFound/indes";
 import AdminPage from "./components/Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LayoutAdmin from "./components/Admin/LayoutAdmin";
+import './styles/reset.scss';
 
 const Layout = () => {
   return (
+
     <div className="layout-app">
       <Header />
       <Outlet />
       <Footer />
     </div>
+
   );
 };
 
 export default function App() {
-  if (
-    window.location.pathname === "./login" ||
-    window.location.pathname === "./admin"
-  )
-    return;
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.account.isAuthenticated);
+  const isLoading = useSelector((state) => state.account.isLoading);
 
   const getAccount = async () => {
+    if (
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register"
+    )
+      return;
     const res = await callFetchAccount();
     if (res && res.data) {
       dispatch(doGetAccountAction(res.data));
@@ -44,6 +48,7 @@ export default function App() {
   useEffect(() => {
     getAccount();
   }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -64,7 +69,7 @@ export default function App() {
     },
     {
       path: "/admin",
-      element: <Layout />,
+      element: <LayoutAdmin />,
       errorElement: <NotFound />,
 
       children: [
@@ -98,9 +103,10 @@ export default function App() {
 
   return (
     <>
-      {isAuthenticated === true ||
-      window.location.pathname === "/login" ||
-      window.location.pathname === "/admin" ? (
+      {isLoading === false ||
+        window.location.pathname === "/login" ||
+        window.location.pathname === "/register" ||
+        window.location.pathname === "/" ? (
         <RouterProvider router={router} />
       ) : (
         <Loading />
@@ -108,3 +114,4 @@ export default function App() {
     </>
   );
 }
+
