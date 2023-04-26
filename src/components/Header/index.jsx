@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { FaReact } from 'react-icons/fa';
 import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
-import { Divider, Badge, Drawer, message } from "antd";
+import { Divider, Badge, Drawer, message, Avatar } from "antd";
 import './header.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { callLogout } from '../../services/api';
 import { doLogoutAction } from '../../redux/account/accountSlice';
 
@@ -44,7 +44,16 @@ const Header = () => {
       >Đăng xuất</label>,
       key: 'logout',
     }
-  ]
+  ];
+
+  if (user?.role === 'ADMIN') {
+    items.unshift({
+      label: <Link to="/admin">Trang quản lý</Link>,
+      key: 'admin',
+    })
+  }
+
+  const urlAvartar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
 
   return (
     <>
@@ -79,7 +88,8 @@ const Header = () => {
                   <Dropdown menu={{ items }} trigger={['click']}>
                     <a onClick={(e) => e.preventDefault()}>
                       <Space>
-                        Welcome {user?.fullName}
+                        <Avatar src={urlAvartar} />
+                        {user?.fullName}
                       </Space>
                     </a>
                   </Dropdown>

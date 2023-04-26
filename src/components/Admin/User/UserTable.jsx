@@ -3,7 +3,7 @@ import { Table, Row, Col, Button } from 'antd';
 import InputSearch from './InputSearch';
 import { current } from '@reduxjs/toolkit';
 import { callFetchListUser } from '../../../services/api';
-import { ReloadOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserViewDetail from './UserViewDetail';
 
 
@@ -50,6 +50,41 @@ const UserTable = () => {
 
     }
 
+    const renderHeader = () => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Table List Users</span>
+                <span style={{ display: 'flex', gap: 15 }}>
+                    <Button
+                        icon={<ExportOutlined />}
+                        type='primary'
+                        onClick={() => handleSearch()}
+                    >Export
+                    </Button>
+                    <Button
+                        icon={<CloudUploadOutlined />}
+                        type='primary'
+                        onClick={() => handleSearch()}
+                    >Import
+                    </Button>
+                    <Button
+                        icon={<PlusOutlined />}
+                        type='primary'
+                        onClick={() => handleSearch()}
+                    >Export
+                    </Button>
+                    <Button type='ghost' onClick={() => {
+                        setFilter("");
+                        setSortQuery("");
+
+                    }}>
+                        <ReloadOutlined />
+                    </Button>
+                </span>
+            </div>
+        )
+    }
+
 
     const columns = [
         {
@@ -89,9 +124,7 @@ const UserTable = () => {
                 return (
                     <>
                         <Button>Delete</Button>
-                        <Button type='ghost' onClick={() => fetchUser()}>
-                            <ReloadOutlined />
-                        </Button>
+
                     </>
 
                 )
@@ -132,6 +165,7 @@ const UserTable = () => {
 
                 <Col span={24} >
                     <Table
+                        title={renderHeader}
                         loading={isLoading}
                         className='def'
                         columns={columns}
@@ -143,7 +177,8 @@ const UserTable = () => {
                                 current: current,
                                 pageSize: pageSize,
                                 showSizeChanger: true,
-                                total: total
+                                total: total,
+                                showTotal: (total, range) => { return (<div>{range[0]}-{range[1]} trên {total} rows</div>) }
                             }
 
                         }
