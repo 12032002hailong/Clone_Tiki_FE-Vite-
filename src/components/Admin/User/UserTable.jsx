@@ -5,6 +5,8 @@ import { current } from '@reduxjs/toolkit';
 import { callFetchListUser } from '../../../services/api';
 import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserViewDetail from './UserViewDetail';
+import UserModalCreate from './UserModalCreate';
+import UserImport from './data/UserImport';
 
 
 
@@ -20,6 +22,10 @@ const UserTable = () => {
     const [filter, setFilter] = useState("");
     const [openViewDetail, setOpenViewDetail] = useState(null);
     const [dataViewDetail, setDataViewDetail] = useState(false);
+
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+
+    const [openModalImport, setOpenModalImport] = useState(false);
 
     useEffect(() => {
         fetchUser();
@@ -64,19 +70,18 @@ const UserTable = () => {
                     <Button
                         icon={<CloudUploadOutlined />}
                         type='primary'
-                        onClick={() => handleSearch()}
+                        onClick={() => setOpenModalImport(true)}
                     >Import
                     </Button>
                     <Button
                         icon={<PlusOutlined />}
                         type='primary'
-                        onClick={() => handleSearch()}
-                    >Export
+                        onClick={() => setOpenModalCreate(true)}
+                    >Add new
                     </Button>
                     <Button type='ghost' onClick={() => {
                         setFilter("");
                         setSortQuery("");
-
                     }}>
                         <ReloadOutlined />
                     </Button>
@@ -124,7 +129,6 @@ const UserTable = () => {
                 return (
                     <>
                         <Button>Delete</Button>
-
                     </>
 
                 )
@@ -194,6 +198,15 @@ const UserTable = () => {
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
 
+            />
+            <UserModalCreate
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
+            />
+
+            <UserImport
+                openModalImport={openModalImport}
+                setOpenModalImport={setOpenModalImport}
             />
         </>
     )
