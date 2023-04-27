@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { InboxOutlined } from '@ant-design/icons';
-import { message, Modal, Table, Upload } from 'antd';
+import { message, Modal, notification, Table, Upload } from 'antd';
 import * as XLSX from 'xlsx';
+import { callBulkCreateUser } from '../../../../services/api';
 
 const { Dragger } = Upload;
 
@@ -57,16 +58,42 @@ const UserImport = (props) => {
             console.log("Dropped files", e.dataTransfer.files);
         }
     }
+
+    const handleSubmit = async () => {
+        const data = dataExcel.map(item => {
+            item.password = '123456';
+            return item;
+        })
+
+        const res = await callBulkCreateUser(data);
+        if (res.data) {
+            notification.success({
+                description: `Success: ${res.data.countSuccess}, Error:${res.data.countError}`,
+                message: `Upload data thành công`,
+            })
+            setDataExcel([]);
+            setOpenModalImport(false);
+            props.fetchUser();
+        } else {
+            notification.error({
+                description: res.message,
+                message: `Đã có lỗi xảy ra`,
+            })
+        }
+    }
     return (
         <>
             <Modal title="Import data user"
                 width={"50vw"}
                 open={openModalImport}
-                onOk={() => setOpenModalImport(false)}
-                onCancel={() => setOpenModalImport(false)}
+                onOk={() => handleSubmit()}
+                onCancel={() => {
+                    setOpenModalImport(false)
+                    setDataExcel([]);
+                }}
                 okText="Import data"
                 okButtonProps={{
-                    disabled: true
+                    disabled: dataExcel.length < 1
                 }}
                 maskClosable={false}
             >
