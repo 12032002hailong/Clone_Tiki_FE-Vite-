@@ -7,7 +7,7 @@ import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } fro
 import UserViewDetail from './UserViewDetail';
 import UserModalCreate from './UserModalCreate';
 import UserImport from './data/UserImport';
-
+import * as XLSX from 'xlsx';
 
 
 const UserTable = () => {
@@ -56,6 +56,15 @@ const UserTable = () => {
 
     }
 
+    const handleExportData = () => {
+        if (listUser.length > 0) {
+            const worksheet = XLSX.utils.json_to_sheet(listUser);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+            XLSX.writeFile(workbook, "ExportUser.csv");
+        }
+    }
+
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -64,7 +73,7 @@ const UserTable = () => {
                     <Button
                         icon={<ExportOutlined />}
                         type='primary'
-                        onClick={() => handleSearch()}
+                        onClick={() => handleExportData()}
                     >Export
                     </Button>
                     <Button
