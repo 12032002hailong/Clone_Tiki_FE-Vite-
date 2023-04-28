@@ -3,6 +3,7 @@ import { InboxOutlined } from '@ant-design/icons';
 import { message, Modal, notification, Table, Upload } from 'antd';
 import * as XLSX from 'xlsx';
 import { callBulkCreateUser } from '../../../../services/api';
+import templateFile from './template.xlsx?url';
 
 const { Dragger } = Upload;
 
@@ -103,8 +104,8 @@ const UserImport = (props) => {
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
                     <p className="ant-upload-hint">
-                        Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                        banned files.
+                        Support for a single or bulk upload. Only accept .csv, .xls, .xlsx. or
+                        &nbsp; <a onClick={e => e.stopPropagation()} href={templateFile} download>Dowload Sample File</a>
                     </p>
                 </Dragger>
                 <div style={{ paddingTop: 20 }}>
