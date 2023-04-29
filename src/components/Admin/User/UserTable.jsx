@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Button } from 'antd';
+import { Table, Row, Col, Button, Popconfirm, message, notification } from 'antd';
 import InputSearch from './InputSearch';
 import { current } from '@reduxjs/toolkit';
-import { callFetchListUser } from '../../../services/api';
-import { CloudUploadOutlined, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { callDeleteUser, callFetchListUser } from '../../../services/api';
+import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserViewDetail from './UserViewDetail';
 import UserModalCreate from './UserModalCreate';
 import UserImport from './data/UserImport';
 import * as XLSX from 'xlsx';
+import UserModalUpdate from './UserModalUpdate';
 
 
 const UserTable = () => {
@@ -20,10 +21,13 @@ const UserTable = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [sortQuery, setSortQuery] = useState("");
     const [filter, setFilter] = useState("");
-    const [openViewDetail, setOpenViewDetail] = useState(null);
+    const [openViewDetail, setOpenViewDetail] = useState();
     const [dataViewDetail, setDataViewDetail] = useState(false);
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
+
+    const [openModalUpdate, setOpenModalUpdate] = useState(false)
+    const [dataUpdate, setDataUpdate] = useState();
 
     const [openModalImport, setOpenModalImport] = useState(false);
 
@@ -52,8 +56,7 @@ const UserTable = () => {
     }
 
     const handleSearch = (query) => {
-        setFilter(query);
-
+        setFilter(query)
     }
 
     const handleExportData = () => {
@@ -62,6 +65,19 @@ const UserTable = () => {
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
             XLSX.writeFile(workbook, "ExportUser.csv");
+        }
+    }
+
+    const handleDeleteUser = async (userId) => {
+        const res = await callDeleteUser(userId);
+        if (res && res.data) {
+            message.success('Xoá người dùng thành công');
+            fetchUser();
+        } else {
+            notification.error({
+                message: "Có lỗi xảy ra",
+                description: res.message
+            })
         }
     }
 
@@ -91,6 +107,7 @@ const UserTable = () => {
                     <Button type='ghost' onClick={() => {
                         setFilter("");
                         setSortQuery("");
+                        fetchUser();
                     }}>
                         <ReloadOutlined />
                     </Button>
@@ -137,7 +154,26 @@ const UserTable = () => {
             render: (text, record, index) => {
                 return (
                     <>
-                        <Button>Delete</Button>
+                        <Popconfirm
+                            placement='left-top'
+                            title={"Xác nhận xoá User"}
+                            description={"Bạn có chắc chắn xoá User này chứ ?"}
+                            onConfirm={() => handleDeleteUser(record._id)}
+                            onText="Xác nhận"
+                            cancelText="Huỷ"
+                        >
+                            <span style={{ cursor: "pointer", margin: "0 20px" }}>
+                                <DeleteTwoTone twoToneColor="#ff4d4f" />
+                            </span>
+                        </Popconfirm>
+
+                        <EditTwoTone
+                            twoToneColor="#f57800" style={{ cursor: "pointer" }}
+                            onClick={() => {
+                                setOpenModalUpdate(true)
+                                setDataUpdate(record)
+                            }}
+                        />
                     </>
 
                 )
@@ -211,6 +247,12 @@ const UserTable = () => {
             <UserModalCreate
                 openModalCreate={openModalCreate}
                 setOpenModalCreate={setOpenModalCreate}
+            />
+            <UserModalUpdate
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
             />
 
             <UserImport

@@ -10,24 +10,20 @@ const InputSearch = (props) => {
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
-        let query = '';
-        if (values.fullName) {
-            query += `&fullName=/${values.fullName}/i`;
+        let query = "";
 
+        if (values.fullName) {
+            query += `&fullName/${values.fullName}/i`;
         }
         if (values.email) {
-            query += `&email=/${values.email}/i`
-
+            query += `&email/${values.email}/i`;
         }
         if (values.phone) {
-            query += `&phone=/${values.phone}/i`
-
+            query += `&phone/${values.phone}/i`;
         }
         if (query) {
             props.handleSearch(query);
-
         }
-
     }
 
     return (
@@ -75,7 +71,7 @@ const InputSearch = (props) => {
 
 
                 <Button type="primary" htmlType="submit"
-                    onClick={(item) => props.handleSearch(item)}
+                    onClick={(values) => onFinish(values)}
                 >
                     Search
                 </Button>
