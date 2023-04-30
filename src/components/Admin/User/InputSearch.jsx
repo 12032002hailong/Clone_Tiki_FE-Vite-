@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 
 import { Button, Col, Form, Input, Row, theme, } from "antd";
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { values } from "lodash";
+
 
 const InputSearch = (props) => {
     const { token } = theme.useToken();
@@ -13,17 +12,18 @@ const InputSearch = (props) => {
         let query = "";
 
         if (values.fullName) {
-            query += `&fullName/${values.fullName}/i`;
+            query += `&fullName=/${values.fullName}/i`;
         }
         if (values.email) {
-            query += `&email/${values.email}/i`;
+            query += `&email=/${values.email}/i`;
         }
         if (values.phone) {
-            query += `&phone/${values.phone}/i`;
+            query += `&phone=/${values.phone}/i`;
         }
         if (query) {
             props.handleSearch(query);
         }
+
     }
 
     return (
@@ -38,7 +38,7 @@ const InputSearch = (props) => {
                     <Col span={8} >
                         <Form.Item
                             labelCol={{ span: 24 }}
-                            name={`fullName}`}
+                            name={`fullName`}
                             label={`Name`}
 
                         >
@@ -48,7 +48,7 @@ const InputSearch = (props) => {
                     <Col span={8} >
                         <Form.Item
                             labelCol={{ span: 24 }}
-                            name={`email}`}
+                            name={`email`}
                             label={`Email`}
 
                         >
@@ -58,7 +58,7 @@ const InputSearch = (props) => {
                     <Col span={8} >
                         <Form.Item
                             labelCol={{ span: 24 }}
-                            name={`phone}`}
+                            name={`phone`}
                             label={`Số điện thoại`}
 
                         >
@@ -68,10 +68,7 @@ const InputSearch = (props) => {
 
                 </Row>
 
-
-
                 <Button type="primary" htmlType="submit"
-                    onClick={(values) => onFinish(values)}
                 >
                     Search
                 </Button>

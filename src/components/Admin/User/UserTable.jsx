@@ -36,7 +36,6 @@ const UserTable = () => {
     }, [current, pageSize, filter, sortQuery]);
 
 
-
     const fetchUser = async () => {
         setIsLoading(true);
         let query = `current=${current}&pageSize=${pageSize}`;
