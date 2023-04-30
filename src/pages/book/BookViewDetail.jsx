@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Descriptions, Divider, Drawer, Modal, Upload } from 'antd';
 import moment from 'moment/moment';
 import { PlusOutlined } from '@ant-design/icons';
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -15,6 +15,37 @@ const BookViewDetail = (props) => {
 
     };
 
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
+    const [fileList, setFileList] = useState([]);
+
+
+    useEffect(() => {
+        if (dataViewDetail) {
+            let imgThumbnail = {}, imgSlider = [];
+            if (dataViewDetail.thumbnail) {
+                imgThumbnail = {
+                    uid: uuidv4(),
+                    name: dataViewDetail.thumbnail,
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataViewDetail.thumbnail}`,
+                }
+            }
+            if (dataViewDetail.slider) {
+                dataViewDetail.slider.map(item => {
+                    imgSlider.push({
+                        uid: uuidv4(),
+                        name: item,
+                        status: 'done',
+                        url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${item}`,
+                    })
+                })
+            }
+            setFileList([imgThumbnail, ...imgSlider])
+        }
+    }, [dataViewDetail])
+
     const getBase64 = (file) =>
         new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -22,37 +53,6 @@ const BookViewDetail = (props) => {
             reader.onload = () => resolve(reader.result);
             reader.onerror = (error) => reject(error);
         });
-
-
-    const [previewOpen, setPreviewOpen] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-2',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-3',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            uid: '-4',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-    ]);
 
     const handleCancel = () => setPreviewOpen(false);
 
