@@ -9,6 +9,7 @@ import UserModalCreate from './UserModalCreate';
 import UserImport from './data/UserImport';
 import * as XLSX from 'xlsx';
 import UserModalUpdate from './UserModalUpdate';
+import moment from 'moment/moment';
 
 
 const UserTable = () => {
@@ -21,8 +22,8 @@ const UserTable = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [sortQuery, setSortQuery] = useState("");
     const [filter, setFilter] = useState("");
-    const [openViewDetail, setOpenViewDetail] = useState();
-    const [dataViewDetail, setDataViewDetail] = useState(false);
+    const [openViewDetail, setOpenViewDetail] = useState(false);
+    const [dataViewDetail, setDataViewDetail] = useState();
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
 
@@ -128,7 +129,8 @@ const UserTable = () => {
                     }}>{record._id}</a>
 
                 )
-            }
+            },
+            sorter: true
 
         },
         {
