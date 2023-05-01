@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import moment from 'moment/moment';
 import { callFetchListBook } from '../../services/api';
 import BookViewDetail from './BookViewDetail';
+import BookModalCreate from './BookModalCreate';
 
 
 const BookPage = () => {
@@ -22,6 +23,8 @@ const BookPage = () => {
 
   const [openViewDetail, setOpenViewDetail] = useState(false);
   const [dataViewDetail, setDataViewDetail] = useState();
+
+  const [openModalCreate, setOpenModalCreate] = useState(false);
 
 
   useEffect(() => {
@@ -59,11 +62,25 @@ const BookPage = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>Table List Book</span>
         <span style={{ display: 'flex', gap: 15 }}>
-          <ReloadOutlined />
+          <Button
+            icon={<PlusOutlined />}
+            type='primary'
+            onClick={() => setOpenModalCreate(true)}
+          >Add new
+          </Button>
+          <Button type='ghost' onClick={() => {
+            setFilter("");
+            setSortQuery("");
+            fetchBook();
+          }}>
+            <ReloadOutlined />
+          </Button>
         </span>
       </div>
     )
   }
+
+
 
 
   const columns = [
@@ -165,9 +182,7 @@ const BookPage = () => {
             handleSearch={handleSearch}
             setFilter={setFilter}
           />
-
         </Col>
-
         <Col span={24} >
           <Table
             title={renderHeader}
@@ -188,9 +203,7 @@ const BookPage = () => {
 
             }
           >
-
           </Table>
-
         </Col>
       </Row>
       <BookViewDetail
@@ -199,6 +212,10 @@ const BookPage = () => {
         dataViewDetail={dataViewDetail}
         setDataViewDetail={setDataViewDetail}
 
+      />
+      <BookModalCreate
+        openModalCreate={openModalCreate}
+        setOpenModalCreate={setOpenModalCreate}
       />
     </>
   )
