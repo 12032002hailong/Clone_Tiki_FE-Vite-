@@ -151,6 +151,17 @@ const UserTable = () => {
             sorter: true
         },
         {
+            title: 'ngày cập nhật',
+            dataIndex: 'updateAt',
+            sorter: true,
+            render: (text, record, index) => {
+                return (
+                    <>{moment(dataViewDetail?.updatedAt).format("DD-MM-YYYY hh:mm:ss")}</>
+                )
+            }
+        },
+
+        {
             title: 'Action',
             render: (text, record, index) => {
                 return (
@@ -248,6 +259,7 @@ const UserTable = () => {
             <UserModalCreate
                 openModalCreate={openModalCreate}
                 setOpenModalCreate={setOpenModalCreate}
+                fetchUser={fetchUser}
             />
             <UserModalUpdate
                 openModalUpdate={openModalUpdate}

@@ -18,13 +18,14 @@ const BookPage = () => {
   const [total, setTotal] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [sortQuery, setSortQuery] = useState("");
+  const [sortQuery, setSortQuery] = useState("sort=-updateAt");
   const [filter, setFilter] = useState("");
 
   const [openViewDetail, setOpenViewDetail] = useState(false);
-  const [dataViewDetail, setDataViewDetail] = useState();
+  const [dataViewDetail, setDataViewDetail] = useState(null);
 
   const [openModalCreate, setOpenModalCreate] = useState(false);
+
 
 
   useEffect(() => {
@@ -119,7 +120,24 @@ const BookPage = () => {
     {
       title: 'Giá tiền',
       dataIndex: 'price',
-      sorter: true
+      sorter: true,
+      render: (text, record, index) => {
+        return (
+          <>
+            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(text)}
+          </>
+        )
+      }
+    },
+    {
+      title: 'ngày cập nhật',
+      dataIndex: 'updateAt',
+      sorter: true,
+      render: (text, record, index) => {
+        return (
+          <>{moment(dataViewDetail?.updatedAt).format("DD-MM-YYYY hh:mm:ss")}</>
+        )
+      }
     },
     {
       title: 'Action',
@@ -216,6 +234,7 @@ const BookPage = () => {
       <BookModalCreate
         openModalCreate={openModalCreate}
         setOpenModalCreate={setOpenModalCreate}
+        fetchBook={fetchBook}
       />
     </>
   )

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { callFetchCategory, callUploadBookImg } from '../../services/api'
-import { Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Upload, message } from 'antd';
+import { callCreateBook, callFetchCategory, callUploadBookImg } from '../../services/api'
+import { Col, Divider, Form, Input, InputNumber, Modal, Row, Select, Upload, message, notification } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 
 const BookModalCreate = (props) => {
@@ -15,8 +15,8 @@ const BookModalCreate = (props) => {
     const [loadingSlider, setLoadingSlider] = useState(false);
 
     const [imageUrl, setImageUrl] = useState("");
-    const [dataThumbnail, setDataThumbnail] = useState([]);
-    const [dataSlider, setDataSlider] = useState([]);
+    const [dataThumbnail, setDataThumbnail] = useState(null);
+    const [dataSlider, setDataSlider] = useState(null);
 
     const [previewImage, setPreviewImage] = useState();
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -37,29 +37,45 @@ const BookModalCreate = (props) => {
 
 
     const onFinish = async (values) => {
+        console.log("values", values)
+        console.log("dataThumbnail", dataThumbnail)
+        console.log("dataSlider", dataSlider)
+        if (dataThumbnail.length === 0) {
+            notification.error({
+                message: 'Lỗi validate',
+                description: 'Vui lòng upload ảnh Thumbnail'
+            })
+            return;
+        }
 
+        if (dataSlider.length === 0) {
+            notification.error({
+                message: 'Lỗi validate',
+                description: 'Vui lòng upload ảnh Slider'
+            })
+            return;
+        }
 
+        const { mainText, author, price, sold, quantity, category } = values;
+        const thumbnail = dataThumbnail[0].name;
+        const slider = dataSlider.map(item => item.name);
 
-        return;
-
-        const { fullName, password, email, phone } = values;
-        setIsSubmit(true);
-        const res = await callCreateAUser(fullName, password, email, phone);
-
+        setIsSubmit(true)
+        const res = await callCreateBook(thumbnail, slider, mainText, author, price, category, quantity, sold);
         if (res && res.data) {
-            message.success("Tạo mới người dùng thành công");
+            message.success('Tạo mới book thành công');
             form.resetFields();
+            setDataSlider([]);
+            setDataThumbnail([]);
             setOpenModalCreate(false);
-            await props.fetchUser();
-
-
+            await props.fetchBook();
         } else {
             notification.error({
                 message: 'Đã có lỗi xảy ra',
                 description: res.message
             })
         }
-        setIsSubmit(false)
+        setIsSubmit(false);
     };
 
     const getBase64 = (img, callback) => {
@@ -110,21 +126,22 @@ const BookModalCreate = (props) => {
             }])
             onSuccess('ok')
         } else {
-            onError('Đã có lỗi khi upload file');
+            onError('Đã có lỗi xảy ra khi upload file')
         }
     }
+
     const handleUploadFileSlider = async ({ file, onSuccess, onError }) => {
         const res = await callUploadBookImg(file);
         if (res && res.data) {
-            setDataSlider((dataSlider) => [...dataSlider, {
+            setDataSlider([{
                 name: res.data.fileUploaded,
                 uid: file.uid
             }])
             onSuccess('ok')
         } else {
-            onError('Đã có lỗi khi upload file');
+            onError('Đã có lỗi xảy ra khi upload file')
         }
-    }
+    };
 
     const handleRemoveFile = (file, type) => {
         if (type === 'thumbnail') {
@@ -302,7 +319,7 @@ const BookModalCreate = (props) => {
                     </Row>
                 </Form>
             </Modal>
-            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={() => setPreviewOpen(false)}>
+            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={() => setPreviewOpen(false)} >
                 <img alt='example' style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>

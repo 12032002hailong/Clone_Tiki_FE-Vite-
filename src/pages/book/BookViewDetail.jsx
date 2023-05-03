@@ -92,15 +92,17 @@ const BookViewDetail = (props) => {
                     <Descriptions.Item label="Tên sách">{dataViewDetail?.mainText}</Descriptions.Item>
                     <Descriptions.Item label="Tác giả">{dataViewDetail?.author}</Descriptions.Item>
                     <Descriptions.Item label="Giá tiền">{dataViewDetail?.price} VNĐ</Descriptions.Item>
+                    <Descriptions.Item label="Số lượng">{dataViewDetail?.quantity}</Descriptions.Item>
+                    <Descriptions.Item label="Đã bán">{dataViewDetail?.sold}</Descriptions.Item>
 
                     <Descriptions.Item label="Thể loại" span={2}>
                         <Badge status="processing" text={dataViewDetail?.category} />
                     </Descriptions.Item>
                     <Descriptions.Item label="Create At" >
-                        {moment(dataViewDetail?.createdAt).format("DD-MM-YYY hh:mm:ss")}
+                        {moment(dataViewDetail?.createdAt).format("DD-MM-YYYY hh:mm:ss")}
                     </Descriptions.Item>
                     <Descriptions.Item label="Update At" >
-                        {moment(dataViewDetail?.updatedAt).format("DD-MM-YYY hh:mm:ss")}
+                        {moment(dataViewDetail?.updatedAt).format("DD-MM-YYYY hh:mm:ss")}
                     </Descriptions.Item>
                 </Descriptions>
                 <Divider orientation='left'>Ảnh Books</Divider>

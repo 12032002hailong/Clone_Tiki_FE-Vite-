@@ -19,7 +19,6 @@ const UserModalCreate = (props) => {
             setOpenModalCreate(false);
             await props.fetchUser();
 
-
         } else {
             notification.error({
                 message: 'Đã có lỗi xảy ra',
