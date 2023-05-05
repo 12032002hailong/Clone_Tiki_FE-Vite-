@@ -8,6 +8,7 @@ import moment from 'moment/moment';
 import { callFetchListBook } from '../../services/api';
 import BookViewDetail from './BookViewDetail';
 import BookModalCreate from './BookModalCreate';
+import BookModalUpdate from './BookModalUpdate';
 
 
 const BookPage = () => {
@@ -25,6 +26,9 @@ const BookPage = () => {
   const [dataViewDetail, setDataViewDetail] = useState(null);
 
   const [openModalCreate, setOpenModalCreate] = useState(false);
+
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [dataUpdate, setDataUpdate] = useState(null);
 
 
 
@@ -235,6 +239,13 @@ const BookPage = () => {
         openModalCreate={openModalCreate}
         setOpenModalCreate={setOpenModalCreate}
         fetchBook={fetchBook}
+      />
+      <BookModalUpdate
+        openModalUpdate={openModalUpdate}
+        setOpenModalUpdate={setOpenModalUpdate}
+        dataUpdate={dataUpdate}
+        setDataUpdate={setDataUpdate}
+
       />
     </>
   )
