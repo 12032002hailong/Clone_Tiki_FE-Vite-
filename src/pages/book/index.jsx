@@ -5,7 +5,7 @@ import { current } from '@reduxjs/toolkit';
 import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import moment from 'moment/moment';
-import { callFetchListBook } from '../../services/api';
+import { callDeleteBook, callFetchListBook } from '../../services/api';
 import BookViewDetail from './BookViewDetail';
 import BookModalCreate from './BookModalCreate';
 import BookModalUpdate from './BookModalUpdate';
@@ -85,7 +85,18 @@ const BookPage = () => {
     )
   }
 
-
+  const handleDeleteBook = async (id) => {
+    const res = await callDeleteBook(id);
+    if (res && res.data) {
+      message.success('Xoá người dùng thành công');
+      fetchBook();
+    } else {
+      notification.error({
+        message: "Có lỗi xảy ra",
+        description: res.message
+      })
+    }
+  }
 
 
   const columns = [
@@ -151,9 +162,9 @@ const BookPage = () => {
           <>
             <Popconfirm
               placement='left-top'
-              title={"Xác nhận xoá User"}
-              description={"Bạn có chắc chắn xoá User này chứ ?"}
-              onConfirm={() => handleDeleteUser(record._id)}
+              title={"Xác nhận xoá book"}
+              description={"Bạn có chắc chắn xoá book này chứ ?"}
+              onConfirm={() => handleDeleteBook(record._id)}
               onText="Xác nhận"
               cancelText="Huỷ"
             >

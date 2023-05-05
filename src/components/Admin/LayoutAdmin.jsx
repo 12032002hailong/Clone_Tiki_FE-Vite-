@@ -48,7 +48,7 @@ const items = [
         icon: <ExceptionOutlined />
     },
     {
-        label: <Link to="/admin/book">Manage Orders</Link>,
+        label: <Link to="/admin/order ">Manage Orders</Link>,
         key: "order",
         icon: <DollarCircleFilled />
     }
@@ -128,9 +128,6 @@ const LayoutAdmin = () => {
                 <Content>
                     <Outlet />
                 </Content>
-                <Footer style={{ padding: 0 }}>
-                    create; 2023. Made with<HeartTwoTone />
-                </Footer>
             </Layout>
         </Layout>
     );
