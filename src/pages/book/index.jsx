@@ -245,6 +245,7 @@ const BookPage = () => {
         setOpenModalUpdate={setOpenModalUpdate}
         dataUpdate={dataUpdate}
         setDataUpdate={setDataUpdate}
+        fetchBook={fetchBook}
 
       />
     </>
