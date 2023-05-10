@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <>
       <footer>
-        <div>React Test &copy; 2023 by Hai Long</div>
+
       </footer>
     </>
 
