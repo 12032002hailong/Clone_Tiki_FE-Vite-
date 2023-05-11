@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaReact } from 'react-icons/fa';
 import { FiShoppingCart } from "react-icons/fi";
 import { VscSearchFuzzy } from "react-icons/vsc";
-import { Divider, Badge, Drawer, message, Avatar } from "antd";
+import { Divider, Badge, Drawer, message, Avatar, Popover } from "antd";
 import './header.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined } from '@ant-design/icons';
@@ -54,7 +54,32 @@ const Header = () => {
     })
   }
 
+  const contentPopover = () => {
+    return (
+      <div className='pop-cart-body'>
+        <div className='pop-cart-content'>
+          {carts?.map((book, index) => {
+            return (
+              <div className='book' key={`book-${index}`}>
+                <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${book?.detail?.thumbnail}`} />
+                <div>{book?.detail?.mainText}</div>
+                <div className='price'>
+                  {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(book?.detail?.price ?? 0)}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <div className='pop-cart-footer'>
+          <button>Xem giỏ hàng</button>
+        </div>
+      </div>
+    )
+  }
+
   const urlAvartar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
+
+
 
   return (
     <>
@@ -76,11 +101,22 @@ const Header = () => {
           <nav className='page-header__bottom'>
             <ul id="navigation" className='navigation'>
               <li className='navigation__item'>
-                <Badge
-                  count={carts?.length ?? 0}
-                  size={"small"}
-                  showZero
-                ><FiShoppingCart className='icon-cart' /></Badge>
+                <Popover
+                  className='popover'
+                  placement='topRight'
+                  rootClassName='popover-carts'
+                  title={"Sản phẩm mới thêm"}
+                  content={contentPopover}
+                  arrow={true}
+                >
+                  <Badge
+                    count={carts?.length ?? 0}
+                    size={"small"}
+                    showZero
+                  ><FiShoppingCart className='icon-cart' />
+                  </Badge>
+                </Popover>
+
               </li>
               <li className='navigation__item moblie'><Divider type='vertical' /></li>
               <li className='navigation__item moblie'>

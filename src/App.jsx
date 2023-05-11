@@ -20,6 +20,8 @@ import UserTable from "./components/Admin/User/UserTable";
 import BookAdmin from "./pages/admin";
 import BookPage from "./pages/book";
 import ViewDetail from "./components/Book/ViewDetail";
+import './styles/global.scss';
+
 
 const Layout = () => {
   return (
