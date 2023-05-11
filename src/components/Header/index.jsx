@@ -21,6 +21,7 @@ const Header = () => {
   const user = useSelector(state => state.account.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const carts = useSelector(state => state.order.carts)
 
   const handleLogout = async () => {
     const res = await callLogout();
@@ -62,7 +63,7 @@ const Header = () => {
           <div className='page-header__top'>
             <div className='page-header__toggle' onClick={() => { setOpenDrawer(true) }}>📝</div>
             <div className='page-header__logo'>
-              <span className='logo'>
+              <span onClick={() => navigate('/')} className='logo'>
                 <FaReact className='rotate icon-react' /> ABC DEF
                 <VscSearchFuzzy className='icon-search' />
               </span>
@@ -76,8 +77,9 @@ const Header = () => {
             <ul id="navigation" className='navigation'>
               <li className='navigation__item'>
                 <Badge
-                  count={5}
+                  count={carts?.length ?? 0}
                   size={"small"}
+                  showZero
                 ><FiShoppingCart className='icon-cart' /></Badge>
               </li>
               <li className='navigation__item moblie'><Divider type='vertical' /></li>

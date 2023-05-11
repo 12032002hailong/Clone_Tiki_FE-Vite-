@@ -97,7 +97,7 @@ const LayoutAdmin = () => {
                 collapsed={collapsed}
                 onCollapse={(value) => setCollapsed(value)}
             >
-                <div style={{ height: 32, margin: 16, textAlign: 'center' }}>
+                <div onClick={() => navigate('/')} style={{ height: 32, margin: 16, textAlign: 'center', cursor: 'pointer' }}>
                     Admin
                 </div>
                 <Menu
