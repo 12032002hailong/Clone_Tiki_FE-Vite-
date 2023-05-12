@@ -21,6 +21,7 @@ import BookAdmin from "./pages/admin";
 import BookPage from "./pages/book";
 import ViewDetail from "./components/Book/ViewDetail";
 import './styles/global.scss';
+import ViewOrder from "./components/Order/ViewOrder";
 
 
 const Layout = () => {
@@ -69,7 +70,11 @@ export default function App() {
         {
           path: "book/:slug",
           element: <BookPage />
-        }
+        },
+        {
+          path: "order",
+          element: <ViewOrder />
+        },
       ]
     },
     {
